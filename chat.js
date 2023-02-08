@@ -19,7 +19,21 @@ io.on('connection', (socket) => {
   socket.on('newMessageToServer', (msg) => {
     // console.log(msg);
     io.emit('messageToClients', { text: msg.text });
+    // io.of('/').emit('messageToClients', { text: msg.text });
   });
+
+  setTimeout(() => {
+    io.of('/admin').emit(
+      'welcome',
+      'Welcome to the admin channel from the root channel'
+    );
+  }, 2000);
+
+  //   io.of('/admin').emit(
+  //     'welcome',
+  //     'Welcome to the admin channel from the root channel'
+  //   );
+  // This will not be executed because the /admin namespace is not even connectedby the time this is called, hence it does not get executed at client side. Use setTimeout to get this to execute.
 });
 
 // io.emit('ping', () => console.log('Sending ping from server'));
@@ -39,3 +53,8 @@ io.on('connection', (socket) => {
 // io.on('pong', () => {
 //   console.log('io.on pong hasbeen hit on server.');
 // });
+
+io.of('/admin').on('connection', (socket) => {
+  console.log('Someone connected to the admin namespace');
+  io.of('/admin').emit('welcome', 'Welcome to the admin namespace');
+});
