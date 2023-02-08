@@ -7,7 +7,9 @@ app.use(express.static(__dirname + '/public'));
 const expressServer = app.listen(9000, () => {
   console.log('Listening on port 9000');
 });
-const io = socketio(expressServer);
+const io = socketio(expressServer, {
+  origin: '*',
+});
 
 io.on('connection', (socket) => {
   socket.on('messageToServer', (dataFromClient) => {
